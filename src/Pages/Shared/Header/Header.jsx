@@ -53,8 +53,8 @@ const Header = () => {
             <Nav>
               {user?.uid ? (
                 <>
-                  <Nav.Link onClick={handleLogOut}>Logout</Nav.Link>
-                  <Nav.Link eventKey={2} href="#memes">
+                  <Link onClick={handleLogOut}>Logout</Link>
+                  <Link to='/profile'>
                     {user?.photoURL ? (
                       <Image
                         style={{ height: "30px" }}
@@ -64,7 +64,7 @@ const Header = () => {
                     ) : (
                       <FaUser></FaUser>
                     )}
-                  </Nav.Link>
+                  </Link>
                 </>
               ) : (
                 <>
