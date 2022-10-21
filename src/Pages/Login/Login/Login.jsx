@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 
@@ -21,9 +22,11 @@ const Login = () => {
     signIn(email, password)
       .then((result) => {
         const user = result.user;
+        console.log(user);
         form.reset();
         navigate(from, { replace: true });
         setError("");
+        toast.success("Successfully logged in", { duration: 4000 });
       })
       .catch((error) => {
         setError(error.message);

@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -41,9 +42,12 @@ const AuthProvider = ({ children }) => {
     return updateProfile(auth.currentUser, profile);
   };
 
+  const verifyEmail = () => {
+    return sendEmailVerification(auth.currentUser);
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("User inside state change: ", currentUser);
       setUser(currentUser);
       setLoading(false);
     });
@@ -62,6 +66,7 @@ const AuthProvider = ({ children }) => {
     signIn,
     loading,
     updateUserProfile,
+    verifyEmail,
   };
   return (
     <>
