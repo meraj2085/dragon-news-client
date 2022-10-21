@@ -1,31 +1,47 @@
 import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 
 const Register = () => {
-  const { createUser } = useContext(AuthContext);
-  const [error, setError] = useState('')
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const [accepted, setAccepted] = useState(false);
 
-  const handleSubmit = event => {
-     event.preventDefault();
-     const form = event.target;
-     const name = form.name.value;
-     const photoURL = form.photoURL.value;
-     const email = form.email.value;
-     const password = form.password.value;
-     console.log(name, photoURL, email, password);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const photoURL = form.photoURL.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(name, photoURL, email, password);
 
-     createUser(email, password)
-     .then( result => {
-         const user = result.user;
-         form.reset();
-         setError('')
-     })
-     .catch( error => {
-      setError(error.message)
-     });
- }
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        form.reset();
+        setError("");
+        handleUpdateUserProfile(name, photoURL);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
+
+  const handleUpdateUserProfile = (name, photoURL) => {
+    const profile = { displayName: name, photoURL: photoURL };
+    updateUserProfile(profile)
+      .then(() => {})
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleAccepted = (event) => {
+    setAccepted(event.target.checked);
+  };
 
   return (
     <div>
@@ -67,11 +83,20 @@ const Register = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Text className="text-danger">
-            {error}
-          </Form.Text>
+          <Form.Text className="text-danger">{error}</Form.Text>
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Check
+            type="checkbox"
+            onClick={handleAccepted}
+            label={
+              <>
+                Accept <Link to="/terms">terms and conditions</Link>
+              </>
+            }
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" disabled={!accepted}>
           Register
         </Button>
       </Form>
